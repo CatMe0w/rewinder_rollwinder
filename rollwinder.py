@@ -38,9 +38,9 @@ def rollback(tid, pid, is_comment):
         'reason': '6',
     }
 
-    if pid != None:
+    if pid is not None:
         data.update({'pid': pid})
-        if is_comment == True:
+        if is_comment is True:
             data.update({'id_finf': '1'})
         else:
             data.update({'is_finf': 'false'})  # 百！！！！！！！度！！！！！！！！！！！
