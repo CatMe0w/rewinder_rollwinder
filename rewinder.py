@@ -1,11 +1,11 @@
 import requests
+import logging
+import time
+import json
 
 TIEBA_NAME = ''
 TIEBA_FID = ''
 BDUSS = ''
-
-with open('./threads.txt', 'r', encoding='UTF-8') as f:
-    thread_list = f.readlines()
 
 
 def rewind(tid, pid=0):
@@ -33,5 +33,39 @@ def rewind(tid, pid=0):
         'is_frs_mask_list[]': 0
     }
 
-    response = requests.post('https://tieba.baidu.com/mo/q/bawurecoverthread',
-                             headers=headers, data=data, cookies=cookies)
+    while True:
+        try:
+            logging.info('Rewinding thread {}, post {}'.format(tid, pid if pid else None))
+            response = requests.post('https://tieba.baidu.com/mo/q/bawurecoverthread',
+                                     headers=headers, data=data, cookies=cookies)
+            if response.status_code != 200:
+                raise ValueError
+            content = json.loads(response.content)
+            if int(content['no']):
+                logging.critical('Rewind failed. Error code: {}'.format(content['no']))
+                raise NotImplementedError
+        except requests.exceptions.Timeout:
+            print('Remote is not responding, sleep for 30s.')
+            time.sleep(30)
+            continue
+        except ValueError:
+            print('Rate limit exceeded, sleep for 30s.')
+            time.sleep(30)
+            continue
+        else:
+            break
+
+
+def main():
+    logging.basicConfig(level=logging.NOTSET)
+
+    with open('./threads.txt', 'r', encoding='UTF-8') as f:
+        thread_list = f.readlines()
+
+    for thread in thread_list:
+        tid, pid = thread.strip().split(' ')
+        rewind(tid, pid)
+
+
+if '__main__' == __name__:
+    main()
