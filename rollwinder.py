@@ -1,12 +1,11 @@
 import requests
+import logging
+import time
 
 TIEBA_NAME = ''
 TIEBA_FID = ''
 TBS = ''
 BDUSS = ''
-
-with open('./threads.txt', 'r', encoding='UTF-8') as f:
-    thread_list = f.readlines()
 
 
 def rollback(tid, pid, is_comment):
@@ -38,16 +37,42 @@ def rollback(tid, pid, is_comment):
         'reason': '6',
     }
 
-    if pid is not None:
+    if pid != 0:
         data.update({'pid': pid})
-        if is_comment is True:
+        if is_comment == '1':
             data.update({'id_finf': '1'})
         else:
             data.update({'is_finf': 'false'})  # 百！！！！！！！度！！！！！！！！！！！
 
-    response = requests.post('https://tieba.baidu.com/f/commit/post/delete',
-                             headers=headers, data=data, cookies=cookies)
+    while True:
+        try:
+            logging.info('Rollbacking thread {}, post {}'.format(tid, pid if pid else None))
+            response = requests.post('https://tieba.baidu.com/f/commit/post/delete',
+                                     headers=headers, data=data, cookies=cookies)
+            if response.status_code != 200:
+                raise ValueError
+        except requests.exceptions.Timeout:
+            print('Remote is not responding, sleep for 30s.')
+            time.sleep(30)
+            continue
+        except ValueError:
+            print('Rate limit exceeded, sleep for 30s.')
+            time.sleep(30)
+            continue
+        else:
+            break
 
 
-for i in thread_list:
-    rollback(i)
+def main():
+    logging.basicConfig(level=logging.NOTSET)
+
+    with open('./threads.txt', 'r', encoding='UTF-8') as f:
+        thread_list = f.readlines()
+
+    for thread in reversed(thread_list):
+        tid, pid, is_comment = thread.strip().split(' ')
+        rollback(tid, pid, is_comment)
+
+
+if '__main__' == __name__:
+    main()

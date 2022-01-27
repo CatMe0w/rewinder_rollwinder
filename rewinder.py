@@ -63,7 +63,7 @@ def main():
         thread_list = f.readlines()
 
     for thread in thread_list:
-        tid, pid = thread.strip().split(' ')
+        tid, pid, _ = thread.strip().split(' ')
         rewind(tid, pid)
 
 
