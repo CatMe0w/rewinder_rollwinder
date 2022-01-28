@@ -64,7 +64,13 @@ def rollback(tid, pid, is_comment):
 
 
 def main():
-    logging.basicConfig(level=logging.NOTSET)
+    logging.basicConfig(
+        format='%(asctime)s [%(levelname)s] %(message)s',
+        level=logging.INFO,
+        handlers=[
+            logging.FileHandler("rollwinder.log"),
+            logging.StreamHandler()
+        ])
 
     with open('./threads.txt', 'r', encoding='UTF-8') as f:
         thread_list = f.readlines()
@@ -72,6 +78,8 @@ def main():
     for thread in reversed(thread_list):
         tid, pid, is_comment = thread.strip().split(' ')
         rollback(tid, pid, is_comment)
+
+    logging.info('All done! Have fun!')
 
 
 if '__main__' == __name__:

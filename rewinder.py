@@ -57,7 +57,13 @@ def rewind(tid, pid=0):
 
 
 def main():
-    logging.basicConfig(level=logging.NOTSET)
+    logging.basicConfig(
+        format='%(asctime)s [%(levelname)s] %(message)s',
+        level=logging.INFO,
+        handlers=[
+            logging.FileHandler("rewinder.log"),
+            logging.StreamHandler()
+        ])
 
     with open('./threads.txt', 'r', encoding='UTF-8') as f:
         thread_list = f.readlines()
@@ -65,6 +71,8 @@ def main():
     for thread in thread_list:
         tid, pid, _ = thread.strip().split(' ')
         rewind(tid, pid)
+
+    logging.info('All done! Have fun!')
 
 
 if '__main__' == __name__:
