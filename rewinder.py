@@ -42,8 +42,7 @@ def rewind(tid, pid=0):
                 raise ValueError
             content = json.loads(response.content)
             if int(content['no']):
-                logging.critical('Rewind failed. Error code: {}'.format(content['no']))
-                raise NotImplementedError
+                logging.critical('Rewind failed. Response: {}'.format(content))
         except requests.exceptions.Timeout:
             print('Remote is not responding, sleep for 30s.')
             time.sleep(30)
