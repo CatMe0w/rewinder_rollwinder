@@ -51,6 +51,7 @@ def rollback(tid, pid, is_comment):
                                      headers=headers, data=data, cookies=cookies)
             if response.status_code != 200:
                 raise ValueError
+            logging.info('Response: {}'.format(response.text))
         except requests.exceptions.Timeout:
             print('Remote is not responding, sleep for 30s.')
             time.sleep(30)
