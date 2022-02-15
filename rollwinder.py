@@ -69,11 +69,11 @@ def main():
         format='%(asctime)s [%(levelname)s] %(message)s',
         level=logging.INFO,
         handlers=[
-            logging.FileHandler("rollwinder.log"),
+            logging.FileHandler('rollwinder.log'),
             logging.StreamHandler()
         ])
 
-    with open('./threads.txt', 'r', encoding='UTF-8') as f:
+    with open('./rollback.txt', 'r', encoding='UTF-8') as f:
         thread_list = f.readlines()
 
     for thread in reversed(thread_list):

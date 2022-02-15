@@ -61,11 +61,11 @@ def main():
         format='%(asctime)s [%(levelname)s] %(message)s',
         level=logging.INFO,
         handlers=[
-            logging.FileHandler("rewinder.log"),
+            logging.FileHandler('rewinder.log'),
             logging.StreamHandler()
         ])
 
-    with open('./threads.txt', 'r', encoding='UTF-8') as f:
+    with open('./rewind.txt', 'r', encoding='UTF-8') as f:
         thread_list = f.readlines()
 
     for thread in thread_list:
