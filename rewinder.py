@@ -70,7 +70,7 @@ def main():
 
     for thread in thread_list:
         tid, pid, _ = thread.strip().split(' ')
-        rewind(tid, pid)
+        rewind(int(tid), int(pid))
 
     logging.info('All done! Have fun!')
 
