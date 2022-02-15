@@ -75,5 +75,5 @@ def main():
     logging.info('All done! Have fun!')
 
 
-if '__main__' == __name__:
+if __name__ == '__main__':
     main()
