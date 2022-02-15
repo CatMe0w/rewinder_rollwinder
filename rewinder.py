@@ -7,6 +7,8 @@ TIEBA_NAME = ''
 TIEBA_FID = ''
 BDUSS = ''
 
+session = requests.Session()
+
 
 def rewind(tid, pid=0):
     cookies = {
@@ -36,8 +38,8 @@ def rewind(tid, pid=0):
     while True:
         try:
             logging.info('Rewinding thread {}, post {}'.format(tid, pid if pid else None))
-            response = requests.post('https://tieba.baidu.com/mo/q/bawurecoverthread',
-                                     headers=headers, data=data, cookies=cookies)
+            response = session.post('https://tieba.baidu.com/mo/q/bawurecoverthread',
+                                    headers=headers, data=data, cookies=cookies)
             if response.status_code != 200:
                 raise ValueError
             content = json.loads(response.content)

@@ -10,6 +10,8 @@ TBS = ''
 BDUSS = ''
 
 
+session = requests.Session()
+
 def add_sign(data):
     _ = ''
     for (k, v) in sorted(data.items()):
@@ -33,7 +35,7 @@ def delete_thread(tid):
     while True:
         try:
             logging.info('Rollbacking thread {}'.format(tid))
-            response = requests.post('http://c.tieba.baidu.com/c/c/bawu/delthread', data=signed_data)
+            response = session.post('http://c.tieba.baidu.com/c/c/bawu/delthread', data=signed_data)
             if response.status_code != 200:
                 raise ValueError
             content = json.loads(response.content)
@@ -64,7 +66,7 @@ def delete_post(tid, pid):
     while True:
         try:
             logging.info('Rollbacking thread {}, post {}'.format(tid, pid))
-            response = requests.post('http://c.tieba.baidu.com/c/c/bawu/delpost', data=signed_data)
+            response = session.post('http://c.tieba.baidu.com/c/c/bawu/delpost', data=signed_data)
             if response.status_code != 200:
                 raise ValueError
             content = json.loads(response.content)
