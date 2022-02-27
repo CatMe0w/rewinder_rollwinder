@@ -9,13 +9,13 @@ TIEBA_FID = ''
 TBS = ''
 BDUSS = ''
 
-
 session = requests.Session()
+
 
 def add_sign(data):
     _ = ''
     for (k, v) in sorted(data.items()):
-        _ += (k + '=' + v)
+        _ += (str(k) + '=' + str(v))
     _ += 'tiebaclient!!!'
 
     sign = hashlib.md5(_.encode('utf-8')).hexdigest().upper()
