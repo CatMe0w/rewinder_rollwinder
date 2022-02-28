@@ -5,9 +5,9 @@ import json
 import time
 
 TIEBA_NAME = ''
-TIEBA_FID = ''
-TBS = ''
 BDUSS = ''
+TIEBA_FID = 0  # 从 https://tieba.baidu.com/f/commit/share/fnameShareApi?fname=(贴吧名) 复制fid字段
+TBS = ''  # 从 https://tieba.baidu.com/dc/common/tbs 复制tbs字段
 
 session = requests.Session()
 
